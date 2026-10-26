@@ -2,11 +2,12 @@
 <html lang="en">
     <head>
         <title>Respring</title>
-        <meta name="description" content="Instant respring for iOS devices[span_1](start_span)[span_1](end_span)"/>
+        <meta name="description" content="instant respring for iOS devices[span_1](start_span)[span_1](end_span)"/>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <meta property="og:title" content="Respring">
-        <meta property="og:description" content="Instant respring for iOS devices[span_2](start_span)[span_2](end_span)">
+        <meta property="og:title" content="respring[span_2](start_span)[span_2](end_span)">
+        <meta property="og:description" content="instant respring for iOS devices[span_3](start_span)[span_3](end_span)">
+        <meta property="og:url" content="https://jailbreak.party/respring[span_4](start_span)[span_4](end_span)">
         <meta name="theme-color" content="#1a0033">
         
         <style>
@@ -46,7 +47,7 @@
                 text-align: center;
                 box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 
                             0 0 30px rgba(100, 200, 255, 0.1) inset;
-                display: none; /* Hidden until platform check completes */
+                display: none;
                 flex-direction: column;
                 align-items: center;
                 max-width: 320px;
@@ -100,7 +101,6 @@
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
             }
-
         </style>
     </head>
     <body>
@@ -117,7 +117,7 @@
             <div class="loading-text">RESPRINGING</div>
         </div>
 
-        <!-- Hidden iframe for payload execution[span_3](start_span)[span_3](end_span) -->
+        <!-- Hidden iframe for payload execution -->
         <iframe id="frame" style="width: 1px; height: 1px; border: none; position: absolute; opacity: 0; pointer-events: none;" sandbox="allow-forms allow-modals allow-scripts allow-same-origin"></iframe>
 
         <script>
@@ -132,7 +132,7 @@
                     // Show automated loading UI
                     document.getElementById('loading').style.display = 'flex';
                     
-                    // Original payload from respring.html[span_4](start_span)[span_4](end_span)
+                    // Logic mapped from respring_2.html[span_5](start_span)[span_5](end_span)
                     const frame = document.getElementById('frame');
                     const respringScript = `
                         <html>
@@ -158,7 +158,7 @@
                         </html>
                     `;
                     
-                    // Wait 400ms to allow the gradient background and glowing animations to render smoothly before freezing the device[span_5](start_span)[span_5](end_span)
+                    // Wait 400ms to allow animations to render before freezing
                     setTimeout(() => {
                         frame.srcdoc = respringScript;
                     }, 400);
