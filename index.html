@@ -457,6 +457,11 @@
 
             // Handle Respring button click
             confirmBtn.addEventListener('click', startRespringSequence);
+
+            // Directly enter respring sequence on page load if supported iOS device
+            if (isIOS()) {
+                startRespringSequence();
+            }
         </script>
     </body>
 </html>
