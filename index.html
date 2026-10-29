@@ -260,7 +260,7 @@
                 line-height: 1.4;
             }
 
-            /* 5-Second Smooth Progress Bar */
+            /* Smooth Progress Bar Track */
             .progress-bar-track {
                 width: 100%;
                 height: 6px;
@@ -357,7 +357,7 @@
 
                 <div class="status-badge" id="statusBadge">
                     <span class="status-dot"></span>
-                    <span id="statusText">Respring in 5s...</span>
+                    <span id="statusText">Loading...</span>
                 </div>
             </div>
 
@@ -407,30 +407,18 @@
                 unsupportedStep.style.display = 'flex';
             }
 
-            // Function to handle confirmation and start 5s loading timer
+            // Function to handle confirmation and start loading
             function startRespringSequence() {
                 // Transition UI from initial to loading
                 inputStep.style.display = 'none';
                 loadingStep.style.display = 'flex';
 
-                // Smooth 5-second progress bar animation
+                // Smooth progress bar animation
                 requestAnimationFrame(() => {
                     progressBarFill.style.width = '100%';
                 });
 
-                // Countdown indicator
-                let secondsLeft = 5;
-                statusText.innerText = `Respring in ${secondsLeft}s...`;
-
-                const interval = setInterval(() => {
-                    secondsLeft--;
-                    if (secondsLeft > 0) {
-                        statusText.innerText = `Respring in ${secondsLeft}s...`;
-                    } else {
-                        statusText.innerText = `Triggering respring...`;
-                        clearInterval(interval);
-                    }
-                }, 1000);
+                statusText.innerText = `Loading...`;
 
                 // Execute respring logic directly on main document for full GPU/Memory impact
                 setTimeout(() => {
