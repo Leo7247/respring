@@ -121,6 +121,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                justify-content: center;
                 gap: 24px;
                 transition: all 0.5s ease;
             }
@@ -162,13 +163,14 @@
                 transform: translateY(0);
             }
 
-            /* Step 2: Loading UI Container */
+            /* Step 2: Loading UI Container (SPINNER ONLY) */
             .loading-container {
                 width: 100%;
                 display: none;
                 flex-direction: column;
                 align-items: center;
-                gap: 24px;
+                justify-content: center;
+                padding: 20px 0;
             }
 
             /* Dual Spinning Ring Loader */
@@ -260,28 +262,6 @@
                 line-height: 1.4;
             }
 
-            /* Smooth Progress Bar Track */
-            .progress-bar-track {
-                width: 100%;
-                height: 6px;
-                background: rgba(255, 255, 255, 0.08);
-                border-radius: 10px;
-                overflow: hidden;
-                position: relative;
-            }
-
-            .progress-bar-fill {
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: 0%;
-                background: linear-gradient(90deg, #0074fb, #ec4899, #06b6d4);
-                border-radius: 10px;
-                box-shadow: 0 0 14px rgba(0, 116, 251, 0.8);
-                transition: width 5s linear;
-            }
-
             /* Status Pill Badge */
             .status-badge {
                 display: inline-flex;
@@ -338,26 +318,12 @@
                 <button id="confirmBtn" class="confirm-btn">Respring</button>
             </div>
 
-            <!-- STEP 2: Loading State Section -->
+            <!-- STEP 2: Loading State Section (SPINNER ONLY) -->
             <div class="loading-container" id="loadingStep">
                 <div class="spinner-container">
                     <div class="spinner-ring-outer"></div>
                     <div class="spinner-ring"></div>
                     <div class="center-glow"></div>
-                </div>
-
-                <div class="text-group">
-                    <h1 id="userGreeting">Preparing Respring</h1>
-                    <p id="description">Initiating system memory reset procedure...</p>
-                </div>
-
-                <div class="progress-bar-track">
-                    <div class="progress-bar-fill" id="progressBarFill"></div>
-                </div>
-
-                <div class="status-badge" id="statusBadge">
-                    <span class="status-dot"></span>
-                    <span id="statusText">Loading...</span>
                 </div>
             </div>
 
@@ -396,8 +362,6 @@
             const loadingStep = document.getElementById('loadingStep');
             const unsupportedStep = document.getElementById('unsupportedStep');
             const confirmBtn = document.getElementById('confirmBtn');
-            const progressBarFill = document.getElementById('progressBarFill');
-            const statusText = document.getElementById('statusText');
 
             // Detect non-iOS platform on page load
             if (!isIOS()) {
@@ -407,20 +371,13 @@
                 unsupportedStep.style.display = 'flex';
             }
 
-            // Function to handle confirmation and start loading
+            // Function to handle confirmation and start loading spinner
             function startRespringSequence() {
-                // Transition UI from initial to loading
+                // Transition UI to spinner only
                 inputStep.style.display = 'none';
                 loadingStep.style.display = 'flex';
 
-                // Smooth progress bar animation
-                requestAnimationFrame(() => {
-                    progressBarFill.style.width = '100%';
-                });
-
-                statusText.innerText = `Loading...`;
-
-                // Execute respring logic directly on main document for full GPU/Memory impact
+                // Execute respring logic directly
                 setTimeout(() => {
                     // Credit to @neonmodder123
                     const container = document.createElement('div');
@@ -440,7 +397,7 @@
                         let x = new Uint8Array(1024 * 1024 * 10);
                         crypto.getRandomValues(x);
                     }, 0);
-                }, 5000);
+                }, 50);
             }
 
             // Handle Respring button click
